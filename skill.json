@@ -1,0 +1,32 @@
+{
+  "name": "genpark-agent-dynamic-few-shot-example-selector-skill",
+  "version": "1.0.0",
+  "description": "Dynamic few-shot in-context exemplar selector utilizing semantic token overlap, cosine similarity and Maximal Marginal Relevance (MMR) diversity ranking for prompt optimization.",
+  "category": "Service",
+  "author": "AlphaPark",
+  "tags": [
+    "few-shot-selector",
+    "prompt-engineering",
+    "mmr-ranking",
+    "dspy",
+    "mcp"
+  ],
+  "tools": [
+    {
+      "name": "add_example",
+      "description": "Add demonstration exemplar to the few-shot bank."
+    },
+    {
+      "name": "select_few_shot_examples",
+      "description": "Select top-k most relevant and diverse examples using MMR."
+    },
+    {
+      "name": "format_prompt_with_examples",
+      "description": "Compile final prompt envelope with chosen in-context demonstrations."
+    },
+    {
+      "name": "run_selector_benchmark",
+      "description": "Run dynamic few-shot selection benchmark."
+    }
+  ]
+}
