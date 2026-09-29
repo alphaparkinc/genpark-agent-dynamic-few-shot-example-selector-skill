@@ -79,6 +79,7 @@ class AgentDynamicFewShotSelector:
                     "id": best_candidate["id"],
                     "input": best_candidate["input"],
                     "output": best_candidate["output"],
+                    "ngrams": best_candidate["ngrams"],
                     "relevance_score": round(query_sims[best_candidate["id"]], 4),
                     "mmr_score": round(best_score, 4)
                 })
@@ -87,28 +88,24 @@ class AgentDynamicFewShotSelector:
         return {
             "query": query,
             "method": method,
-            "selected_examples": selected,
+            "selected_examples": [
+                {"id": s["id"], "input": s["input"], "output": s["output"], "relevance_score": s["relevance_score"], "mmr_score": s["mmr_score"]}
+                for s in selected
+            ],
             "selected_count": len(selected)
         }
 
     def format_prompt_with_examples(self, system_instruction, selected_examples, target_query):
-        parts = [f"<system_instruction>
-{system_instruction}
-</system_instruction>
-"]
+        parts = ["<system_instruction>\n" + str(system_instruction) + "\n</system_instruction>\n"]
         parts.append("<demonstrations>")
         for idx, ex in enumerate(selected_examples):
-            parts.append(f"  <example index="{idx + 1}">")
+            parts.append('  <example index="' + str(idx + 1) + '">')
             parts.append(f"    <input>{ex['input']}</input>")
             parts.append(f"    <output>{ex['output']}</output>")
             parts.append("  </example>")
-        parts.append("</demonstrations>
-")
-        parts.append(f"<current_query>
-{target_query}
-</current_query>")
-        return "
-".join(parts)
+        parts.append("</demonstrations>\n")
+        parts.append("<current_query>\n" + str(target_query) + "\n</current_query>")
+        return "\n".join(parts)
 
     def run_selector_benchmark(self):
         self.examples.clear()
